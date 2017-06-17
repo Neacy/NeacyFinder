@@ -2,6 +2,7 @@ package com.jayu.compiler;
 
 import com.google.auto.service.AutoService;
 import com.jayu.annotation.BindView;
+import com.jayu.annotation.Intent;
 import com.jayu.annotation.OnClick;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class NeacyProcesser extends AbstractProcessor {
         Set<String> types = new LinkedHashSet<>();
         types.add(BindView.class.getCanonicalName());
         types.add(OnClick.class.getCanonicalName());
+        types.add(Intent.class.getCanonicalName());
         return types;
     }
 
@@ -62,6 +64,7 @@ public class NeacyProcesser extends AbstractProcessor {
         try {
             processBindView(roundEnv);
             processOnClick(roundEnv);
+            processIntent(roundEnv);
         } catch (IllegalArgumentException e) {
             error(e.getMessage());
             return true; // stop process
@@ -85,6 +88,14 @@ public class NeacyProcesser extends AbstractProcessor {
             AnnotateClass annotatedClass = getAnnotatedClass(element);
             BindViewField field = new BindViewField(element);
             annotatedClass.addField(field);
+        }
+    }
+
+    private void processIntent(RoundEnvironment roundEnvironment) {
+        for (Element element : roundEnvironment.getElementsAnnotatedWith(Intent.class)) {
+            AnnotateClass annotateClass = getAnnotatedClass(element);
+            IntentField field = new IntentField(element);
+            annotateClass.addIntent(field);
         }
     }
 

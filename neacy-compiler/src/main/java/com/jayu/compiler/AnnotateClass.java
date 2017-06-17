@@ -1,5 +1,6 @@
 package com.jayu.compiler;
 
+import com.jayu.annotation.Intent;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -20,12 +21,14 @@ public class AnnotateClass {
     public TypeElement mClassElement;
     public List<BindViewField> mFields;
     public List<OnClickMethod> mMethods;
+    public List<IntentField> mIntents;
     public Elements mElementUtils;
 
     public AnnotateClass(TypeElement classElement, Elements elementUtils) {
         this.mClassElement = classElement;
         this.mFields = new ArrayList<>();
         this.mMethods = new ArrayList<>();
+        this.mIntents = new ArrayList<>();
         this.mElementUtils = elementUtils;
     }
 
@@ -39,6 +42,10 @@ public class AnnotateClass {
 
     public void addMethod(OnClickMethod method) {
         mMethods.add(method);
+    }
+
+    public void addIntent(IntentField intent) {
+        mIntents.add(intent);
     }
 
     public JavaFile generateFinder() {
@@ -60,6 +67,11 @@ public class AnnotateClass {
         if (mMethods.size() > 0) {
             injectMethodBuilder.addStatement("$T listener", TypeUtil.ANDROID_ON_CLICK_LISTENER);
         }
+
+        for (IntentField field : mIntents) {
+            injectMethodBuilder.addStatement("host.$N = host.getIntent().getStringExtra($S)", field.getFieldName(), field.getKey());
+        }
+
         for (OnClickMethod method : mMethods) {
             // declare OnClickListener anonymous class
             TypeSpec listener = TypeSpec.anonymousClassBuilder("")

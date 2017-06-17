@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.jayu.annotation.BindView;
+import com.jayu.annotation.Intent;
 import com.jayu.annotation.OnClick;
 import com.jayu.finder.NeacyFinder;
 
@@ -16,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
+
+    @Intent("key")
+    String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     @OnClick({R.id.fab})
     public void fabClick() {
-        Toast.makeText(this, "Neacy", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, key, Toast.LENGTH_LONG).show();
     }
 
     @Override
