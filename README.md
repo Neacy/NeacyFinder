@@ -1,6 +1,6 @@
 # NeacyFinder
 
-simple FindViewById and SetOnClickListener by APT.
+simple FindViewById  SetOnClickListener  getIntent by APT.
 
 # how to use
 
